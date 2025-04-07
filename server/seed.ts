@@ -176,7 +176,16 @@ async function seedDatabase() {
     console.log('✅ Projects seeded successfully');
     
     // Insert profile
-    await db.insert(profile).values(initialProfile);
+    await db.insert(profile).values([{
+      name: initialProfile.name,
+      title: initialProfile.title,
+      bio: initialProfile.bio,
+      avatar: initialProfile.avatar,
+      email: initialProfile.email,
+      location: initialProfile.location,
+      workingHours: initialProfile.workingHours,
+      socialLinks: initialProfile.socialLinks as any
+    }]);
     console.log('✅ Profile seeded successfully');
     
     console.log('Database seeding completed successfully!');

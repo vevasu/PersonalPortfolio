@@ -141,7 +141,16 @@ export class DatabaseStorage implements IStorage {
       // Update existing profile
       const [updatedProfile] = await db
         .update(profile)
-        .set(insertProfile)
+        .set({
+          name: insertProfile.name,
+          title: insertProfile.title,
+          bio: insertProfile.bio,
+          avatar: insertProfile.avatar,
+          email: insertProfile.email,
+          location: insertProfile.location,
+          workingHours: insertProfile.workingHours,
+          socialLinks: insertProfile.socialLinks as any
+        })
         .where(eq(profile.id, existingProfile.id))
         .returning();
       return updatedProfile;
@@ -149,7 +158,16 @@ export class DatabaseStorage implements IStorage {
       // Create new profile
       const [newProfile] = await db
         .insert(profile)
-        .values(insertProfile)
+        .values([{
+          name: insertProfile.name,
+          title: insertProfile.title,
+          bio: insertProfile.bio,
+          avatar: insertProfile.avatar,
+          email: insertProfile.email,
+          location: insertProfile.location,
+          workingHours: insertProfile.workingHours,
+          socialLinks: insertProfile.socialLinks as any
+        }])
         .returning();
       return newProfile;
     }

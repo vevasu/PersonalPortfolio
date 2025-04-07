@@ -1,11 +1,30 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema } from "@shared/schema";
+import { 
+  insertContactSchema, 
+  insertBookSchema, 
+  insertEventSchema, 
+  insertBlogSchema, 
+  insertProjectSchema, 
+  insertProfileSchema 
+} from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { setupAuth } from "./auth";
+
+// Middleware to check if user is authenticated
+const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: "Not authenticated" });
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Set up authentication
+  setupAuth(app);
+  
   // API routes
   const apiRouter = app.route('/api');
   
@@ -158,6 +177,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       res.status(500).json({ message: 'Error submitting contact form' });
+    }
+  });
+
+  // Admin API routes - protected by authentication
+  
+  // Update profile
+  app.put('/api/admin/profile', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const profileData = insertProfileSchema.parse(req.body);
+      const updatedProfile = await storage.updateProfile(profileData);
+      res.json(updatedProfile);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ message: validationError.message });
+      }
+      res.status(500).json({ message: 'Error updating profile' });
+    }
+  });
+
+  // Book CRUD operations
+  app.post('/api/admin/books', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const bookData = insertBookSchema.parse(req.body);
+      const newBook = await storage.createBook(bookData);
+      res.status(201).json(newBook);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ message: validationError.message });
+      }
+      res.status(500).json({ message: 'Error creating book' });
+    }
+  });
+
+  // Project CRUD operations
+  app.post('/api/admin/projects', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const projectData = insertProjectSchema.parse(req.body);
+      const newProject = await storage.createProject(projectData);
+      res.status(201).json(newProject);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ message: validationError.message });
+      }
+      res.status(500).json({ message: 'Error creating project' });
+    }
+  });
+
+  // Event CRUD operations
+  app.post('/api/admin/events', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const eventData = insertEventSchema.parse(req.body);
+      const newEvent = await storage.createEvent(eventData);
+      res.status(201).json(newEvent);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ message: validationError.message });
+      }
+      res.status(500).json({ message: 'Error creating event' });
+    }
+  });
+
+  // Blog CRUD operations
+  app.post('/api/admin/blogs', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const blogData = insertBlogSchema.parse(req.body);
+      const newBlog = await storage.createBlog(blogData);
+      res.status(201).json(newBlog);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ message: validationError.message });
+      }
+      res.status(500).json({ message: 'Error creating blog' });
     }
   });
 
