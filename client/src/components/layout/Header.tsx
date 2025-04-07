@@ -41,22 +41,29 @@ export default function Header() {
     <header className={`fixed w-full bg-white/90 backdrop-blur-sm z-50 border-b border-gray-200 transition-shadow duration-300 ${scrolled ? 'shadow-md' : ''}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/">
-            <a className="text-2xl font-heading font-bold text-primary">
-              {profile?.name || 'Portfolio'}
-            </a>
+          <Link href="/" className="text-2xl font-heading font-bold text-primary">
+            {profile?.name || 'Portfolio'}
           </Link>
           
           <nav className="hidden md:block">
             <ul className="flex space-x-8">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a 
-                    href={link.href} 
-                    className="text-gray-600 hover:text-secondary transition duration-300"
-                  >
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('/') ? (
+                    <Link 
+                      href={link.href} 
+                      className="text-gray-600 hover:text-secondary transition duration-300"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a 
+                      href={link.href} 
+                      className="text-gray-600 hover:text-secondary transition duration-300"
+                    >
+                      {link.name}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -87,13 +94,23 @@ export default function Header() {
             <ul className="space-y-4">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a 
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)} 
-                    className="block py-2 text-gray-600 hover:text-secondary transition duration-300"
-                  >
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('/') ? (
+                    <Link 
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)} 
+                      className="block py-2 text-gray-600 hover:text-secondary transition duration-300"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a 
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)} 
+                      className="block py-2 text-gray-600 hover:text-secondary transition duration-300"
+                    >
+                      {link.name}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

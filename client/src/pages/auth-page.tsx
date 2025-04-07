@@ -30,12 +30,6 @@ export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [, setLocation] = useLocation();
 
-  // Redirect if user is already logged in
-  if (user) {
-    setLocation("/");
-    return null;
-  }
-
   // Login form
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -63,6 +57,12 @@ export default function AuthPage() {
     const { username, password } = values;
     registerMutation.mutate({ username, password });
   };
+  
+  // Redirect if user is already logged in
+  // This needs to be after all hook calls
+  if (user) {
+    setTimeout(() => setLocation("/admin"), 0);
+  }
 
   return (
     <div className="flex min-h-screen">
