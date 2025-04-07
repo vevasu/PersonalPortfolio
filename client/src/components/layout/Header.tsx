@@ -34,6 +34,7 @@ export default function Header() {
     { name: 'Events', href: '/#events' },
     { name: 'Blogs', href: '/#blogs' },
     { name: 'Projects', href: '/#projects' },
+    { name: 'Login', href: '/auth' },
   ];
 
   return (
