@@ -6,7 +6,6 @@ import Books from "@/components/home/Books";
 import Events from "@/components/home/Events";
 import Blogs from "@/components/home/Blogs";
 import Projects from "@/components/home/Projects";
-import Contact from "@/components/home/Contact";
 import { useQuery } from "@tanstack/react-query";
 import { Profile } from "@/lib/types";
 
@@ -39,7 +38,6 @@ export default function Home() {
         <Events />
         <Blogs />
         <Projects />
-        <Contact />
       </main>
       
       <Footer />

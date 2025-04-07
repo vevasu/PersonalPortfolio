@@ -58,11 +58,14 @@ export default function Hero() {
                   Explore My Work
                 </Button>
               </a>
-              <a href="#contact">
-                <Button variant="outline" className="px-6 py-6 border border-secondary text-secondary rounded-md hover:bg-secondary/10 transition duration-300">
-                  Get In Touch
-                </Button>
-              </a>
+              {profile?.socialLinks.linkedin && (
+                <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="px-6 py-6 border border-secondary text-secondary rounded-md hover:bg-secondary/10 transition duration-300">
+                    <Linkedin className="mr-2 h-5 w-5" />
+                    Connect on LinkedIn
+                  </Button>
+                </a>
+              )}
             </div>
             <div className="mt-12 flex space-x-6">
               {profile?.socialLinks.twitter && (
@@ -73,11 +76,6 @@ export default function Hero() {
               {profile?.socialLinks.github && (
                 <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-secondary transition duration-300">
                   <GitPullRequest size={24} />
-                </a>
-              )}
-              {profile?.socialLinks.linkedin && (
-                <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-secondary transition duration-300">
-                  <Linkedin size={24} />
                 </a>
               )}
               {profile?.socialLinks.medium && (

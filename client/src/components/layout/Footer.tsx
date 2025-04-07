@@ -14,7 +14,6 @@ export default function Footer() {
     { name: 'Events', href: '/#events' },
     { name: 'Blogs', href: '/#blogs' },
     { name: 'Projects', href: '/#projects' },
-    { name: 'Contact', href: '/#contact' },
   ];
 
   const socialLinks = [
